@@ -1,52 +1,45 @@
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class DeliveryTransaction extends Transaction {
-    private double deliveryFee;
+    private static final double DELIVERY_FEE = 55.00;
 
-    public DeliveryTransaction(Shop shop, Customer customer, ArrayList<Product> items,
-                               double payment, String modeOfPayment,
-                               String deliveryDateTime, double deliveryFee) {
-        super(shop, customer, items, payment, modeOfPayment, deliveryDateTime);
-        this.deliveryFee = deliveryFee;
-        this.totalAmount = computeTotal();
-    }
-
-    public double getDeliveryFee() {
-        return deliveryFee;
-    }
-
-    public void setDeliveryFee(double deliveryFee) {
-        if (deliveryFee >= 0) {
-            this.deliveryFee = deliveryFee;
-            this.totalAmount = computeTotal();
-        }
+    public DeliveryTransaction(Shop shop, Customer customer, String modeOfPayment) {
+        super(shop, customer, modeOfPayment);
     }
 
     @Override
     public double computeTotal() {
-        double baseTotal = super.computeTotal();
-        this.totalAmount = baseTotal + deliveryFee;
-        return this.totalAmount;
+        double itemsTotal = super.computeTotal();
+        double grandTotal = itemsTotal + DELIVERY_FEE;
+        setTotalAmount(grandTotal);
+        return grandTotal;
     }
 
     @Override
     public void displayReceipt() {
         DecimalFormat df = new DecimalFormat("#,##0.00");
-        System.out.println("\n============= GROCERY DELIVERY RECEIPT ============");
+        double change = getPayment() - getTotalAmount();
+
+        System.out.println("\n=======================================================");
+        System.out.println("            TNJ EXPRESS DELIVERY RECEIPT               ");
+        System.out.println("=======================================================");
         shop.displayShop();
+        System.out.println("-------------------------------------------------------");
         customer.displayCustomer();
-        System.out.println("Delivery Date/Time: " + deliveryDateTime);
-        System.out.println("Mode of Payment:    " + modeOfPayment);
-        System.out.println("---------------------------------------------------");
-        for (Product item : items) {
-            item.printSummary();
+        System.out.println("-------------------------------------------------------");
+        System.out.println("Delivery Date    : " + getDeliveryDate());
+        System.out.println("Delivery Time    : " + getDeliveryTime());
+        System.out.println("ORDERED ITEMS:");
+        for (Product item : getItems()) {
+            item.displayProduct();
         }
-        System.out.println("---------------------------------------------------");
-        System.out.println("Delivery Fee: Php " + df.format(deliveryFee));
-        System.out.println("Total Amount: Php " + df.format(totalAmount));
-        System.out.println("Payment:      Php " + df.format(payment));
-        System.out.println("Change:       Php " + df.format(computeChange()));
-        System.out.println("===================================================\n");
+        System.out.println("-------------------------------------------------------");
+        System.out.println("Items Subtotal   : Php " + df.format(super.computeTotal()));
+        System.out.println("Delivery Fee     : Php " + df.format(DELIVERY_FEE));
+        System.out.println("Total Amount     : Php " + df.format(getTotalAmount()));
+        System.out.println("Mode of Payment  : " + getModeOfPayment());
+        System.out.println("Payment          : Php " + df.format(getPayment()));
+        System.out.println("Change           : Php " + df.format(change));
+        System.out.println("=======================================================\n");
     }
 }
