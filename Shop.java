@@ -1,11 +1,11 @@
+
 public class Shop extends Entity {
     private String shopName;
     private String shopAddress;
 
     public Shop(String shopName, String shopAddress) {
-        super(shopAddress);
-        this.shopName = shopName;
-        this.shopAddress = shopAddress;
+        setShopName(shopName);
+        setShopAddress(shopAddress);
     }
 
     public String getShopName() {
@@ -14,7 +14,9 @@ public class Shop extends Entity {
 
     public void setShopName(String shopName) {
         if (shopName != null && !shopName.trim().isEmpty()) {
-            this.shopName = shopName;
+            this.shopName = shopName.trim();
+        } else {
+            this.shopName = "Unknown Shop";
         }
     }
 
@@ -24,25 +26,28 @@ public class Shop extends Entity {
 
     public void setShopAddress(String shopAddress) {
         if (shopAddress != null && !shopAddress.trim().isEmpty()) {
-            this.shopAddress = shopAddress;
-            super.setAddress(shopAddress);
+            this.shopAddress = shopAddress.trim();
+        } else {
+            this.shopAddress = "No Address";
         }
     }
 
     public void displayShop() {
-        System.out.println("===================================================");
-        System.out.println("Shop Name: " + shopName);
+        System.out.println("Shop Name    : " + shopName);
         displayAddress();
-        System.out.println("===================================================");
     }
 
-    @Override
     public void displayAddress() {
-        System.out.println("Shop Address: " + shopAddress);
+        System.out.println("Shop Address : " + shopAddress);
     }
 
     @Override
     public void displayDetails() {
         displayShop();
+    }
+
+    @Override
+    public void displaySummary() {
+        System.out.println(shopName + " - " + shopAddress);
     }
 }
