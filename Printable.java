@@ -1,3 +1,3 @@
 public interface Printable {
-    void printSummary();
+    void displaySummary();
 }
