@@ -3,11 +3,14 @@ public class Customer extends Entity {
     private String customerAddress;
     private String phoneNumber;
 
+    public Customer(String customerName, String customerAddress) {
+        this(customerName, customerAddress, "N/A");
+    }
+
     public Customer(String customerName, String customerAddress, String phoneNumber) {
-        super(customerAddress);
-        this.customerName = customerName;
-        this.customerAddress = customerAddress;
-        this.phoneNumber = phoneNumber;
+        setCustomerName(customerName);
+        setCustomerAddress(customerAddress);
+        setPhoneNumber(phoneNumber);
     }
 
     public String getCustomerName() {
@@ -16,7 +19,9 @@ public class Customer extends Entity {
 
     public void setCustomerName(String customerName) {
         if (customerName != null && !customerName.trim().isEmpty()) {
-            this.customerName = customerName;
+            this.customerName = customerName.trim();
+        } else {
+            this.customerName = "Walk-in Customer";
         }
     }
 
@@ -26,8 +31,9 @@ public class Customer extends Entity {
 
     public void setCustomerAddress(String customerAddress) {
         if (customerAddress != null && !customerAddress.trim().isEmpty()) {
-            this.customerAddress = customerAddress;
-            super.setAddress(customerAddress);
+            this.customerAddress = customerAddress.trim();
+        } else {
+            this.customerAddress = "No Address";
         }
     }
 
@@ -37,23 +43,29 @@ public class Customer extends Entity {
 
     public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            this.phoneNumber = phoneNumber;
+            this.phoneNumber = phoneNumber.trim();
+        } else {
+            this.phoneNumber = "N/A";
         }
     }
 
     public void displayCustomer() {
-        System.out.println("Customer Name: " + customerName);
+        System.out.println("Customer Name    : " + customerName);
+        System.out.println("Phone Number    : " + phoneNumber);
         displayAddress();
-        System.out.println("Phone Number:  " + phoneNumber);
     }
 
-    @Override
     public void displayAddress() {
-        System.out.println("Delivery Address: " + customerAddress);
+        System.out.println("Customer Address : " + customerAddress);
     }
 
     @Override
     public void displayDetails() {
         displayCustomer();
+    }
+
+    @Override
+    public void displaySummary() {
+        System.out.println(customerName + " - " + customerAddress + " - " + phoneNumber);
     }
 }
